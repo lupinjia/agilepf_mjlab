@@ -1,0 +1,14 @@
+This project includes robot-specific code extracted from the AgilePF portions
+of mjlab (https://github.com/mujocolab/mjlab). The source repository provides
+Apache License 2.0 terms for its code. This attribution does not establish the
+license or ownership of the robot model or mesh assets.
+
+The AgilePF MJCF and nine STL meshes were copied from the source repository's
+AgilePF asset directory. Their original authorship, provenance, and
+redistribution terms have not been independently confirmed. No license for
+those mesh assets is asserted by this notice; confirm their rights before
+redistributing them.
+
+The default AgilePF built-in PD gains and actuator settings are derived from
+the robot-specific constants in that source. The optional linear-decay
+actuator implementation is not included in this project.

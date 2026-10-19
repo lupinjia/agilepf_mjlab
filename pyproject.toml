@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agilepf-mjlab"
+version = "0.1.0"
+description = "AgilePF robot assets and symmetry support for mjlab"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = ["mjlab==1.6.0", "wandb>=0.28.2,<0.29"]
+
+[project.entry-points."mjlab.tasks"]
+agilepf = "agilepf_mjlab.tasks"
+
+[project.scripts]
+agilepf-export-onnx = "agilepf_mjlab.onnx_metadata:export_checkpoint_main"
+agilepf-attach-onnx-metadata = "agilepf_mjlab.onnx_metadata:attach_metadata_main"
+
+[dependency-groups]
+dev = ["pytest>=9.0", "ruff>=0.16"]
+
+[tool.ruff]
+indent-width = 2
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agilepf_mjlab"]
+force-include = { "NOTICE" = "NOTICE" }
+
+[tool.hatch.build]
+include = [
+  "NOTICE",
+  "src/agilepf_mjlab/**/*.py",
+  "src/agilepf_mjlab/**/*.xml",
+  "src/agilepf_mjlab/**/*.STL",
+]
