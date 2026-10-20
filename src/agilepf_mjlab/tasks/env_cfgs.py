@@ -258,6 +258,15 @@ def agilepf_rough_env_cfg(
       weight=0.5,
       params={"command_name": "twist", "std": math.sqrt(0.25)},
     ),
+    "track_base_height": RewardTermCfg(
+      func=agilepf_mdp.track_base_height,
+      weight=0.5,
+      params={
+        "height_scan_sensor_name": "terrain_scan",
+        "height_target": 0.42,
+        "std": 0.1,
+      },
+    ),
     "base_orientation": RewardTermCfg(
       func=base_mdp.flat_orientation_l2,
       weight=-3.0,
@@ -356,7 +365,7 @@ def agilepf_rough_env_cfg(
       ),
     ),
     "periodic_gait": agilepf_mdp.GaitCommandCfg(
-      gait_period=0.4,
+      gait_period=0.45,
       theta_left=0.0,
       theta_right=0.5,
       gait_function_type="step",
@@ -553,6 +562,7 @@ def agilepf_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     s for s in (cfg.scene.sensors or ()) if s.name not in remove_sensors
   )
   del cfg.observations["critic"].terms["height_scan"]
+  cfg.rewards["track_base_height"].params["height_scan_sensor_name"] = None
 
   # On flat terrain fell_over is sufficient; thigh contact implies fallen.
   cfg.terminations.pop("out_of_terrain_bounds", None)
@@ -568,6 +578,6 @@ def agilepf_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     twist_cmd = cfg.commands["twist"]
     assert isinstance(twist_cmd, UniformVelocityCommandCfg)
     twist_cmd.ranges.lin_vel_x = (-0.5, 0.8)
-    twist_cmd.ranges.ang_vel_z = (-0.4, 0.4)
+    twist_cmd.ranges.ang_vel_z = (-0.8, 0.8)
 
   return cfg

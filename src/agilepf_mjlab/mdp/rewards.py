@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import torch
 from mjlab.entity import Entity
 from mjlab.managers.scene_entity_config import SceneEntityCfg
-from mjlab.sensor import ContactSensor
+from mjlab.sensor import ContactSensor, RayCastSensor
 from mjlab.sensor.terrain_height_sensor import TerrainHeightSensor
 from mjlab.utils.lab_api.math import quat_apply_inverse
 
@@ -73,6 +73,31 @@ def track_angular_velocity_yaw(
     assert len(asset_cfg.body_ids) == 1, "Only support specify one body"
     actual = asset.data.body_link_ang_vel_b[:, asset_cfg.body_ids, :].squeeze(1)
   return torch.exp(-torch.square(command[:, 2] - actual[:, 2]) / std**2)
+
+
+def track_base_height(
+  env: ManagerBasedRlEnv,
+  height_scan_sensor_name: str | None = None,
+  height_target: float = 0.0,
+  std: float = 0.1,
+  asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
+) -> torch.Tensor:
+  asset: Entity = env.scene[asset_cfg.name]
+  if height_scan_sensor_name is None:
+    height = asset.data.root_link_pos_w[:, 2]
+  else:
+    sensor: RayCastSensor = env.scene[height_scan_sensor_name]
+    data = sensor.data
+    F, N = sensor.num_frames, sensor.num_rays_per_frame
+    B = data.distances.shape[0]
+
+    # Each ray's height = its frame's Z - hit Z. For single-frame sensors (F=1) this
+    # reduces to the original pos_w[:, 2] - hit_z broadcast.
+    hit_z = data.hit_pos_w[..., 2].view(B, F * N)  # [B, F * N]
+    measured_heights = torch.mean(hit_z, dim=1)  # [B,]
+    height = asset.data.root_link_pos_w[:, 2] - measured_heights
+
+  return torch.exp(-torch.square(height - height_target) / std**2)
 
 
 def body_lin_vel_z_penalty(

@@ -16,6 +16,7 @@ from .rewards import (
   body_lin_vel_z_penalty,
   feet_clearance_exp,
   track_angular_velocity_yaw,
+  track_base_height,
   track_linear_x_velocity,
   track_linear_y_velocity,
 )
@@ -36,6 +37,7 @@ __all__ = [
   "pd_gains_scale_obs",
   "reset_from_sitting",
   "track_angular_velocity_yaw",
+  "track_base_height",
   "track_linear_x_velocity",
   "track_linear_y_velocity",
 ]
