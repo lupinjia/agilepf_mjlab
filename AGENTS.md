@@ -48,4 +48,9 @@
   source has been bundled. Confirm framework imports resolve from external
   site-packages and there are no local-path dependencies or symlinks.
 - The STL license/provenance is not established; do not describe the mesh files
-  as Apache-licensed absent confirmation. See `NOTICE`.
+  as any-licensed absent confirmation. See `NOTICE`.
+- Project code is BSD-3-Clause (`LICENSE`, `pyproject.toml`
+  `license`/`license-files`). mjlab-derived portions stay Apache-2.0: retain
+  `LICENSES/Apache-2.0.txt`, the `NOTICE` attribution, and the `License-File`
+  metadata that `uv build --wheel` emits. Keep `README.md` in English and keep
+  its licensing section consistent with `NOTICE`.

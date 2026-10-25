@@ -8,8 +8,8 @@ version = "0.1.0"
 description = "AgilePF robot assets and symmetry support for mjlab"
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
+license = "BSD-3-Clause"
+license-files = ["LICENSE", "LICENSES/*"]
 dependencies = ["mjlab==1.6.0", "wandb>=0.28.2,<0.29"]
 
 [project.entry-points."mjlab.tasks"]
